@@ -23,14 +23,17 @@ def setup_email():
     smtp.login(from_email, pswrd)
     return smtp, from_email, to_email
 
-def send_warning_email(smtp, from_email, to_email):
+def send_warning_email(smtp, from_email, to_email, error_data, error_sensors):
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = to_email
     msg['Date'] = formatdate(localtime = True)
     msg['Subject'] = "Unusual Activity Detected"
+    err_msg = get_error_msg(error_data, error_sensors)
     msg.attach(MIMEText('''Hey James,
     \nI think I may have come across an issue today!
+    \nThe following sensors have detected unusual behaviour:
+    \n''' + err_msg + '''
     \nI will notify you again if there is a problem in 12 hours.
     \nLogger,
     \n''' + logger))
@@ -50,3 +53,11 @@ def setup_file(month, year):
 
 def get_time():
     return datetime.now().hour, datetime.now().month, datetime.now().year
+
+def get_error_msg(error_data, error_sensors):
+    err_msg = ''
+    i = 0
+    n = (error_data)
+    while i < n:
+        err_msg + error_sensors[i] + ': ' + error_data[i] + '\n'
+    reutrn err_msg

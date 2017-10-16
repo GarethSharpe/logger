@@ -60,13 +60,16 @@ while True:
 
     # TODO: implement error detection
     # error_data, error_sensors = sensors.is_error(data)
+    # TESTING
+    error_data = [11]
+    error_sensors = ['Temperature']
 
     # if an error is detect and user has not been notified in
     # the past 12 hours, send a notificaion email of error
     # TODO: update error 
     # TODO: update send_warning_email() to take error_data and error_sensors
     if error == True and (hour == noon or hour == midnight) and not emailed_today:
-        utilities.send_warning_email(smtp, from_email, to_email)
+        utilities.send_warning_email(smtp, from_email, to_email, error_data, error_sensors)
         emailed_today = True
         error = False
     
