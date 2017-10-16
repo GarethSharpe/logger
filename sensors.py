@@ -4,7 +4,7 @@ Created on Oct 16, 2017
 @author: Gareth sharpe
 '''
 
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
 from datetime import datetime
 

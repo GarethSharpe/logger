@@ -60,4 +60,4 @@ def get_error_msg(error_data, error_sensors):
     n = (error_data)
     while i < n:
         err_msg + error_sensors[i] + ': ' + error_data[i] + '\n'
-    reutrn err_msg
+    return err_msg
