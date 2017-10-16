@@ -10,13 +10,10 @@ import csv
 import utilities
 import sensors
 
-from datetime import datetime
 from time import sleep
 
 # initialize date variables
-hour = datetime.now().hour
-month = datetime.now().month
-year = datetime.now().year
+hour, month, year = utilities.get_time()
 
 # setup necessary elements
 dbx = utilities.setup_dropbox()
@@ -43,10 +40,11 @@ noon = 12
 midnight = 24
 
 # initialize error and email variables
+# TODO: update error 
 error = True
 emailed_today = False
 
-# MAIN PROGRAM #
+# MAIN PROGRAM LOOP #
 while True:
 
     # write data to the file
@@ -56,16 +54,17 @@ while True:
 
     # print the data (for testing)
     print(data)
-    
-    # wait one second
-    sleep(1)
 
     # update hour and month
-    hour = datetime.now().hour
-    month = datetime.now().month
+    hour, month, _ = utilities.get_time()
+
+    # TODO: implement error detection
+    # error_data, error_sensors = sensors.is_error(data)
 
     # if an error is detect and user has not been notified in
     # the past 12 hours, send a notificaion email of error
+    # TODO: update error 
+    # TODO: update send_warning_email() to take error_data and error_sensors
     if error == True and (hour == noon or hour == midnight) and not emailed_today:
         utilities.send_warning_email(smtp, from_email, to_email)
         emailed_today = True
@@ -80,7 +79,7 @@ while True:
     if hour == upload_hour:
         file.seek(0)
         dbx.files_upload(str.encode(file.read()), '/' + logger + '/' + file_name, dropbox.files.WriteMode.overwrite, mute=True)
-        upload_hour = (datetime.now().hour + 1) % 24
+        upload_hour = (hour + 1) % 24
     
     # if the file has been open for one month, upload to dropbox 
     # and delete file. After file deletion, setup next file        
@@ -91,4 +90,8 @@ while True:
         os.remove(file)
         upload_month = month + 1
         file, file_name = utilities.setup_file(month, year)
+        writer = csv.writer(file)
         writer.writerow(['date-time', 'sensor1', 'sensor2', 'sensor3', 'sensor4', 'sensor5'])
+
+    # wait one second
+    sleep(1)

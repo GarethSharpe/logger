@@ -9,6 +9,8 @@ from email.mime.text import MIMEText
 from email.utils import formatdate
 from smtplib import SMTP
 
+from datetime import datetime
+
 import dropbox
 
 def setup_email():
@@ -45,3 +47,6 @@ def setup_file(month, year):
     file_name = logger + '-' + str(month) + '-' + str(year) + '.csv'
     file =  open(file_name, 'a+', newline='')
     return file, file_name
+
+def get_time():
+    return datetime.now().hour, datetime.now().month, datetime.now().year

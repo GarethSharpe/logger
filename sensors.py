@@ -9,7 +9,10 @@ import RPi.GPIO as GPIO
 from datetime import datetime
 
 # define number of sensors constant
-SENSORS = 5
+NUM_SENSORS = 5
+SENSORS = ["Temperature", "Humidity", "Light", "Pressure", "Flow"]
+MAX_ERROR_VALUES = [10, 20, 30, 40, 50]
+MIN_ERROR_VALUES = [0, 0, 0, 0, 0]
 
 # define GPIO pins with variables
 read_pin = 18
@@ -39,4 +42,16 @@ def discharge(out_pin):
 def analog_read(out_pin):
     discharge(out_pin)
     return charge_time()
+
+def is_error(data):
+    del a[0] # throw away time stamp
+    error_data = []
+    error_sensors = []
+    sensor = 0
+    while sensor < NUM_SENSORS:
+        if data[sensor] > MAX_ERROR_VALUES[sensor] or data[sensor] < MIN_ERROR_VALUES[sensor]:
+            errors_data.append(data[sensor])
+            errors_sensors.append(SENSORS[sensor])
+    return error_data, error_sensors
+
 	
