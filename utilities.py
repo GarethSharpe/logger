@@ -61,3 +61,9 @@ def get_error_msg(error_data, error_sensors):
     while i < n:
         err_msg + error_sensors[i] + ': ' + error_data[i] + '\n'
     return err_msg
+
+def get_header(sensors):
+    header = ["time-stamp"]
+    for sensor in sensors:
+        header.append(sensor)
+    return header

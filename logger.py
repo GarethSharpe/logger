@@ -27,13 +27,14 @@ upload_month = month + 1
 wipe_year = year + 1
 
 # setup headers of file
-writer.writerow(['date-time', 'sensor1', 'sensor2', 'sensor3', 'sensor4', 'sensor5'])
+header = utilities.get_header(sensors.SENSORS)
+writer.writerow(header)
 
 # console print (for testing)
 print("file name:", file_name)
 print("current year", wipe_year - 1)
 print("wipe year:", wipe_year)
-print(['time-stamp', 'sensor1', 'sensor2', 'sensor3', 'sensor4', 'sensor5'])
+print(header)
 
 # intialize times to send email
 noon = 12
@@ -94,7 +95,7 @@ while True:
         upload_month = month + 1
         file, file_name = utilities.setup_file(month, year)
         writer = csv.writer(file)
-        writer.writerow(['date-time', 'sensor1', 'sensor2', 'sensor3', 'sensor4', 'sensor5'])
+        writer.writerow(header)
 
     # wait one second
     sleep(1)
