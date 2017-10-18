@@ -18,7 +18,7 @@ hour, month, year = utilities.get_time()
 # setup necessary elements
 dbx = utilities.setup_dropbox()
 smtp, from_email, to_email = utilities.setup_email()
-file, file_name = utilities.setup_file(month, year)
+file, file_name, logger = utilities.setup_file(month, year)
 writer = csv.writer(file)
 
 # initialize upload/wipe times

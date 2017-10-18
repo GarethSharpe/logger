@@ -49,7 +49,7 @@ def setup_file(month, year):
     logger = input("logger name: ")
     file_name = logger + '-' + str(month) + '-' + str(year) + '.csv'
     file =  open(file_name, 'a+', newline='')
-    return file, file_name
+    return file, file_name, logger
 
 def get_time():
     return datetime.now().hour, datetime.now().month, datetime.now().year
