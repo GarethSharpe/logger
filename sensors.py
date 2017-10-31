@@ -8,6 +8,7 @@ Created on Oct 16, 2017
 # import piplates.DAQCplate as DAQC 
 
 from datetime import datetime
+import random
 
 # define sensor constants
 NUM_SENSORS = 5
@@ -34,11 +35,11 @@ def get_sensor_data():
     timestamp = str(datetime.now())
     # TODO: remove testing data and call individual functions
     # TESTING
-    s1_data = 1 # DAQC.getADC(ADDRESS, 0)
-    s2_data = 2 # DAQC.getADC(ADDRESS, 1)
-    s3_data = 3 # DAQC.getADC(ADDRESS, 2)
-    s4_data = 4 # DAQC.getADC(ADDRESS, 3)
-    s5_data = 5 # DAQC.getADC(ADDRESS, 4)
+    s1_data = random.uniform(1, 2) # DAQC.getADC(ADDRESS, 0)
+    s2_data = random.uniform(2, 3) # DAQC.getADC(ADDRESS, 1)
+    s3_data = random.uniform(3, 4) # DAQC.getADC(ADDRESS, 2)
+    s4_data = random.uniform(4, 5) # DAQC.getADC(ADDRESS, 3)
+    s5_data = random.uniform(5, 6) # DAQC.getADC(ADDRESS, 4)
 
     # TODO: implement formatting functions
     # temp = round((temp_data - 2.73) * 100, 2)

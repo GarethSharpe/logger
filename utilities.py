@@ -23,7 +23,7 @@ def setup_email():
     smtp.login(from_email, pswrd)
     return smtp, from_email, to_email
 
-def send_warning_email(smtp, from_email, to_email, error_data, error_sensors):
+def send_warning_email(smtp, from_email, to_email, error_data, error_sensors, logger):
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = to_email
@@ -47,8 +47,8 @@ def setup_dropbox():
 
 def setup_file(month, year):
     logger = input("logger name: ")
-    file_name = logger + '-' + str(month) + '-' + str(year) + '.csv'
-    file =  open(file_name, 'a+', newline='')
+    file_name = './logger-dashboard/src/assets/log-' + str(month) + '.csv'
+    file =  open(file_name, 'w+', newline='')
     return file, file_name, logger
 
 def get_time():
@@ -57,9 +57,10 @@ def get_time():
 def get_error_msg(error_data, error_sensors):
     err_msg = ''
     i = 0
-    n = (error_data)
+    n = len(error_data)
     while i < n:
-        err_msg + error_sensors[i] + ': ' + error_data[i] + '\n'
+        err_msg + error_sensors[i] + ': ' + str(error_data[i]) + '\n'
+        i += 1
     return err_msg
 
 def get_header(sensors):
@@ -67,3 +68,23 @@ def get_header(sensors):
     for sensor in sensors:
         header.append(sensor)
     return header
+
+def setup_chart_log():
+    path_to_log = 'logger-dashboard/src/assets/log.csv'
+    file = open(path_to_log, 'w', newline='')
+    return file
+
+def setup_gauge_log():
+    path_to_log = 'logger-dashboard/src/assets/gauge.txt'
+    file = open(path_to_log, 'w', newline='')
+    return file
+
+def setup_line_gauge_logs():
+    path_to_temperature = 'logger-dashboard/src/assets/temperature.txt'
+    path_to_flow = 'logger-dashboard/src/assets/flow.txt'
+    path_to_pressure = 'logger-dashboard/src/assets/pressure.txt'
+    temperature = open(path_to_temperature, 'w')
+    flow = open(path_to_flow, 'w')
+    pressure = open(path_to_pressure, 'w')
+    return temperature, flow, pressure
+

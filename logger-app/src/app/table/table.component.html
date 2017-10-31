@@ -1,0 +1,38 @@
+<div class="container mat-elevation-z8">
+  <div class="header">
+    <mat-form-field floatPlaceholder="never">
+      <input matInput #filter placeholder="Filter loggers">
+    </mat-form-field>
+    <app-logger-dialog></app-logger-dialog>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource">
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="loggerId">
+      <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+    </ng-container>
+
+    <!-- Progress Column -->
+    <ng-container matColumnDef="progress">
+      <mat-header-cell *matHeaderCellDef> Progress </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.progress}}% </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="loggerName">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    </ng-container>
+
+    <!-- Location Column -->
+    <ng-container matColumnDef="location">
+      <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.location}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

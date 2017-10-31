@@ -1,0 +1,17 @@
+.header {
+	margin-left: 10px;
+	font-size: 2rem;
+}
+
+.spacer {
+	flex: 1 1 auto;
+}
+
+.icon {
+  margin-right: 14px
+}
+
+.me {
+	width: 1px;
+	height: 1px;
+}

@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>New Logger</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="Name" tabindex="1" [(ngModel)]="data.logger">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Location" tabindex="2" [(ngModel)]="data.location">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Dashboard Url" tabindex="2" [(ngModel)]="data.url">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="data" tabindex="3">Add</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+</div>

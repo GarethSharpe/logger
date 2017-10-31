@@ -1,0 +1,12 @@
+agm-map {
+	height: 80vh;
+	width: 100%;	
+}
+
+.container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  width: 100%;
+}

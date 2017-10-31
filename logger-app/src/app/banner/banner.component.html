@@ -1,0 +1,9 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let logger of loggers;" (click)="onClick(logger)">{{logger.name}}</button>
+  </mat-menu>
+  <span class="header">Home</span>
+  <span class="spacer"></span>
+  <mat-icon>verified_user</mat-icon>
+</mat-toolbar>
