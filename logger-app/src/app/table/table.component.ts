@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { DataService } from '../data.service';
+
 import * as firebase from "firebase";
 
 import { } from '@types/googlemaps';
@@ -12,9 +14,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
-
-import { Geocode } from '../map/map.component';
-import { DataService } from '../data.service';
 
 var config = {
     apiKey: "AIzaSyDXI-Ohh33wg_dFezqHV0op7Dg1_AxQOWU",
@@ -51,9 +50,7 @@ export class TableComponent {
           if (!this.dataSource) { return; }
           this.dataSource.filter = this.filter.nativeElement.value;
         });
-    this.loggerDatabase.refreshTable().then(() => {
-      this.dataAPI.setDatabase(this.loggerDatabase);
-    });
+    this.loggerDatabase.refreshTable();
   }
 }
 
@@ -71,11 +68,8 @@ export class LoggerDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<LoggerData[]> = new BehaviorSubject<LoggerData[]>([]);
   get data(): LoggerData[] { return this.dataChange.value; }
-  private dataAPI;
 
-  constructor(dataAPI: DataService) {
-    this.dataAPI = dataAPI;
-  }
+  constructor(private dataAPI: DataService) { }
 
   public refreshTable():Promise<any> {
     return new Promise((resolve, reject) => {
@@ -94,19 +88,11 @@ export class LoggerDatabase {
 
   /** Adds a new logger to the database. */
   private addLogger(name, location, url) {
-    Geocode(location).then(result => {
-      var latlng = result;
-      const copiedData = this.data.slice();
-      var logger = this.createNewLogger(name, location, latlng, url);
+    const copiedData = this.data.slice();
+    this.dataAPI.createNewLogger(name, location, url).then((logger) => {
       copiedData.push(logger);
       this.dataChange.next(copiedData);
-      this.dataAPI.addLogger(
-        logger.id, 
-        logger.name, 
-        logger.progress,
-        logger.location, 
-        logger.latlng, 
-        logger.url);
+      this.dataAPI.setLogger(logger);
     });
   }
 
@@ -114,26 +100,10 @@ export class LoggerDatabase {
   private removeLogger(id) {
     var copiedData = this.data.slice();
     copiedData = copiedData.filter(item => item.id != id);
-    this.dataAPI.removeLogger(id);
+    this.dataAPI.deleteLogger(id);
     this.dataChange.next(copiedData);
   }
 
-  /** Builds and returns a new Logger. */
-  private createNewLogger(name, location, latlng, url) {
-    const newName = name;
-    const newLocation = location;
-    const newLatLng = latlng;
-    const newUrl = url
-
-    return {
-      id: (this.data.length + 1).toString(),
-      name: newName,
-      progress: Math.round(Math.random() * 100).toString(),
-      location: newLocation,
-      latlng: newLatLng,
-      url: newUrl
-    };
-  }
 }
 
 export class LoggerDataSource extends DataSource<any> {

@@ -1,6 +1,6 @@
 <agm-map class="container mat-elevation-z8" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
   <agm-marker 
-  *ngFor="let logger of loggers | async"
+  *ngFor="let logger of loggers"
   [latitude]="logger.latlng.lat" [longitude]="logger.latlng.lng">
   </agm-marker>
 </agm-map>

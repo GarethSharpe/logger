@@ -26,14 +26,13 @@ export class DialogComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.logger = result.logger;
-      this.location = result.location;
-      this.url = result.url;
-
       if (result.logger != null && result.location != null && result.url != null) {
-      	var database = this.dataAPI.getDatabase();
-      	database.addLogger(this.logger, this.location, this.url);
-      	console.log("Logger added");
+      	this.dataAPI.createNewLogger(
+          result.logger,
+          result.location,
+          result.url).then((logger) => {
+            this.dataAPI.setLogger(logger);
+          });
       }
     });
   }
@@ -46,15 +45,13 @@ export class DialogComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.id = result.id;
-
       if (result.id != null) {
-        var database = this.dataAPI.getDatabase();
-        database.removeLogger(this.id);
-        console.log("Logger removed");
+        this.dataAPI.deleteLogger(result.id);
       }
     });
   }
+
+
 
 }
 
