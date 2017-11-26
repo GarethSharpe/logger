@@ -3,4 +3,8 @@
   *ngFor="let logger of loggers"
   [latitude]="logger.latlng.lat" [longitude]="logger.latlng.lng">
   </agm-marker>
+  <agm-marker 
+  *ngFor="let logger of loggerCache"
+  [latitude]="logger.latlng.lat" [longitude]="logger.latlng.lng">
+  </agm-marker>
 </agm-map>

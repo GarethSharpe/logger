@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataService, LoggerData } from '../data.service';
 
 @Component({
   selector: 'app-banner',
@@ -8,11 +8,13 @@ import { DataService } from '../data.service';
 })
 export class BannerComponent implements OnInit {
   
-  private loggers: any[];
+  private loggers: LoggerData[];
+  private loggerCache: LoggerData[];
 
   constructor(private dataAPI: DataService) { }
 
   ngOnInit() { 
+    this.loggerCache = this.dataAPI.getLoggerCache();
     this.dataAPI.getLoggers().then((loggers) => {
       this.loggers = loggers;
     });

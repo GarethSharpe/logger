@@ -1,5 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { 
+  MatDialog,
+  MatDialogRef, 
+  MAT_DIALOG_DATA,
+  MatSnackBar } from '@angular/material';
 
 import { DataService } from '../data.service';
 
@@ -15,7 +19,8 @@ export class DialogComponent {
   url: string;
 
   constructor(
-    public dialog: MatDialog,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private dataAPI: DataService) { }
 
   openAddDialog(): void {
@@ -31,6 +36,7 @@ export class DialogComponent {
           result.logger,
           result.location,
           result.url).then((logger) => {
+            this.dataAPI.pushLoggerCache(logger);
             this.dataAPI.setLogger(logger);
           });
       }
@@ -47,7 +53,14 @@ export class DialogComponent {
       console.log('The dialog was closed');
       if (result.id != null) {
         this.dataAPI.deleteLogger(result.id);
+        this.openSnackBar();
       }
+    });
+  }
+
+  openSnackBar() {
+    this.snackBar.open("Logger Deleted", "Done", {
+      duration: 1000,
     });
   }
 

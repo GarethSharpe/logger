@@ -15,7 +15,8 @@ import {
   MatDialogModule,
   MatCardModule,
   MatChipsModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -56,7 +57,8 @@ import { DataService } from './data.service';
     FormsModule,
     MatCardModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   entryComponents: [
   DialogAddLoggerDialog,

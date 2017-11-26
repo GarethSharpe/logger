@@ -2,14 +2,31 @@ import { Injectable } from '@angular/core';
 import * as firebase from "firebase";
 import { } from '@types/googlemaps';
 
+export interface LoggerData {
+  id: string;
+  name: string;
+  progress: string;
+  location: string;
+  latlng: any;
+  url: string;
+}
+
 @Injectable()
 export class DataService {
 
-  logger_id: number;
+  loggerId: number;
+  loggerCache: LoggerData[] = [];
+  dataChange: any;
+
+  get data(): LoggerData[] { return this.dataChange.value; }
 
   constructor() { }
 
-  getLoggers():Promise<any> {
+  subscribeDataChangeListener(dataChange) {
+    this.dataChange = dataChange;
+  }
+
+  getLoggers():Promise<LoggerData[]> {
     return new Promise((resolve, reject) => {
       this.readDatabase().then((loggers) => {
       resolve(loggers);
@@ -17,7 +34,15 @@ export class DataService {
     });
   }
 
-  setLogger(logger) {
+  getLoggerCache() {
+    return this.loggerCache;
+  }
+
+  /** Adds a new logger to the database. */
+  setLogger(logger: LoggerData) {
+    const copiedData = this.data.slice();
+    copiedData.push(logger);
+    this.dataChange.next(copiedData);
     firebase.database().ref('/' + logger.id).set({
       id: logger.id,
       name: logger.name,
@@ -28,14 +53,46 @@ export class DataService {
     });
   }
 
+  getLogger(id: string):Promise<LoggerData> {
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('/').once("value").then((loggersSnapshot) => {
+        for (var key in loggersSnapshot.val()) {
+          var database_logger = loggersSnapshot.val()[key]
+          if (database_logger.id == id) {
+            const logger = this.readLogger(
+              database_logger.id,
+              database_logger.name, 
+              database_logger.progess,
+              database_logger.location, 
+              database_logger.latlng, 
+              database_logger.url);
+            resolve(logger);
+          }
+        }
+      });
+    });
+  }
+ 
+  pushLoggerCache(logger: LoggerData) {
+    this.loggerCache.push(logger);
+  }
+
+  /** Removes a logger from the database. */
   deleteLogger(id: string) {
-    console.log("TODO: deleteLogger()");
+    var copiedData = this.data.slice();
+    copiedData = copiedData.filter(item => item.id != id);
+    this.dataChange.next(copiedData);
+    firebase.database().ref('/').child(id).remove();
+    // Also remove from cache
+    // var index = this.loggerCache.indexOf(logger, 0);
+    // if (index > -1)
+    //   this.loggerCache.splice(index, 1);
   }
 
   /** Builds and returns a new Logger. */
-  createNewLogger(name, location, url):Promise<any> {
+  createNewLogger(name, location, url):Promise<LoggerData> {
     return new Promise((resolve, reject) => {
-      const id = this.logger_id++;
+      const id = this.loggerId++;
       this.Geocode(location).then(latlng => {
       const progress = Math.round(Math.random() * 100).toString();
       const logger = this.readLogger(id, name, progress, location, latlng, url);
@@ -45,13 +102,13 @@ export class DataService {
     })
   }
 
-  readDatabase():Promise<any> {
+  readDatabase():Promise<LoggerData> {
     return new Promise((resolve, reject) => {
       var loggers = []; 
       firebase.database().ref('/').once("value").then((loggersSnapshot) => {
         for (var key in loggersSnapshot.val()) {
-          var database_logger = loggersSnapshot.val()[key]
-          var logger = this.readLogger(
+          const database_logger = loggersSnapshot.val()[key]
+          const logger = this.readLogger(
             database_logger.id,
             database_logger.name, 
             database_logger.progess,
@@ -60,7 +117,7 @@ export class DataService {
             database_logger.url);
           loggers.push(logger);
         }
-        this.logger_id = loggers.length + 1;
+        this.loggerId = loggers.length + 1;
         resolve(loggers);
       });
     });
@@ -88,7 +145,6 @@ export class DataService {
       // get address from {lat, lng}
       geocoder.geocode({'address': address}, function(results, status) {
         if (status[0] == 'O') {
-          // console.log(results);
           lat = results[0].geometry.location.lat();
           lng = results[0].geometry.location.lng();
           var latlng = {lat, lng};
@@ -101,3 +157,5 @@ export class DataService {
   }
 
 }
+
+

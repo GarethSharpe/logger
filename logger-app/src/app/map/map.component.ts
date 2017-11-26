@@ -1,5 +1,5 @@
 import { ElementRef, NgZone, ViewChild, Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataService, LoggerData } from '../data.service';
 import { FormControl } from '@angular/forms';
 
 function log(val) { console.log(val); }
@@ -16,7 +16,8 @@ export class MapComponent implements OnInit {
   // initial center position for the map
   private lat: number = 43.433091;
   private lng: number = -80.547753;
-  private loggers: Promise<any>;
+  private loggers: LoggerData[];
+  private loggerCache: LoggerData[];
 
   constructor(private dataAPI: DataService) { }
 
@@ -24,5 +25,7 @@ export class MapComponent implements OnInit {
     this.dataAPI.getLoggers().then((loggers) => {
       this.loggers = loggers;
     });
+    this.loggerCache = this.dataAPI.getLoggerCache();
   }
+
 }
