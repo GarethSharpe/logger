@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import * as firebase from "firebase";
 
 import { } from '@types/googlemaps';
 
@@ -15,6 +16,17 @@ import 'rxjs/add/observable/fromEvent';
 import { Geocode } from '../map/map.component';
 import { DataService } from '../data.service';
 
+var config = {
+    apiKey: "AIzaSyDXI-Ohh33wg_dFezqHV0op7Dg1_AxQOWU",
+    authDomain: "logger-gsjj.firebaseapp.com",
+    databaseURL: "https://logger-gsjj.firebaseio.com",
+    projectId: "logger-gsjj",
+    storageBucket: "logger-gsjj.appspot.com",
+    messagingSenderId: "134022097913"
+  };
+
+firebase.initializeApp(config);
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -22,7 +34,6 @@ import { DataService } from '../data.service';
 })
 
 export class TableComponent {
-
   displayedColumns = ['loggerId', 'loggerName', 'location'];
   loggerDatabase = new LoggerDatabase(this.dataAPI);
   dataSource: LoggerDataSource | null;
@@ -32,7 +43,6 @@ export class TableComponent {
   @ViewChild('filter') filter: ElementRef;
 
   ngOnInit() {
-    this.dataAPI.setDatabase(this.loggerDatabase);
     this.dataSource = new LoggerDataSource(this.loggerDatabase);
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)
@@ -41,6 +51,9 @@ export class TableComponent {
           if (!this.dataSource) { return; }
           this.dataSource.filter = this.filter.nativeElement.value;
         });
+    this.loggerDatabase.refreshTable().then(() => {
+      this.dataAPI.setDatabase(this.loggerDatabase);
+    });
   }
 }
 
@@ -64,20 +77,41 @@ export class LoggerDatabase {
     this.dataAPI = dataAPI;
   }
 
+  public refreshTable():Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.dataAPI.getLoggers().then((result) => {
+        var loggers = result;
+        var n = loggers.length;
+        for (var i = 0; i < n; i++) {
+            const copiedData = this.data.slice();
+            copiedData.push(loggers[i]);
+            this.dataChange.next(copiedData);
+        }
+      })
+      resolve();
+    });
+  }
+
   /** Adds a new logger to the database. */
-  addLogger(name, location, url) {
+  private addLogger(name, location, url) {
     Geocode(location).then(result => {
       var latlng = result;
       const copiedData = this.data.slice();
       var logger = this.createNewLogger(name, location, latlng, url);
       copiedData.push(logger);
-      this.dataAPI.addLogger(logger);
       this.dataChange.next(copiedData);
+      this.dataAPI.addLogger(
+        logger.id, 
+        logger.name, 
+        logger.progress,
+        logger.location, 
+        logger.latlng, 
+        logger.url);
     });
   }
 
   /** Removes a logger from the database. */
-  removeLogger(id) {
+  private removeLogger(id) {
     var copiedData = this.data.slice();
     copiedData = copiedData.filter(item => item.id != id);
     this.dataAPI.removeLogger(id);

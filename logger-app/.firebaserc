@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "logger-gsjj"
+    "default": "logger-gsjj",
+    "logger-hub": "logger-gsjj"
   }
 }

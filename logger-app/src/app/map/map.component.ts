@@ -20,15 +20,13 @@ export class MapComponent implements OnInit {
   // initial center position for the map
   private lat: number = 43.433091;
   private lng: number = -80.547753;
-  public loggers: any[];
+  private loggers: Promise<any[]>;
 
   constructor(private dataAPI: DataService) { }
 
   ngOnInit() {
-    this.loggers = this.dataAPI.getLoggers();
-    console.log(this.loggers);
+    this.loggers = this.dataAPI.getLoggers()
   }
-
 }
 
 export function Geocode(address: string):Promise<any> {
