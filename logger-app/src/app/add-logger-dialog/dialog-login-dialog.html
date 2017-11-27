@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Authentication</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput placeholder="email" tabindex="1" [(ngModel)]="data.email">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="password" tabindex="2" [(ngModel)]="data.password" [type]="hide ? 'password' : 'text'">
+    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onLoginClick(data)" tabindex="3">Login</button>
+  <button mat-button (click)="onChangePasswordClick()" tabindex="-1">Change Password</button>
+</div>
+    
