@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService, LoggerData } from '../data.service';
+import * as firebase from "firebase";
 
 @Component({
   selector: 'app-banner',
@@ -13,15 +14,9 @@ export class BannerComponent implements OnInit {
 
   constructor(private dataAPI: DataService) { }
 
-  ngOnInit() { 
-    this.loggerCache = this.dataAPI.getLoggerCache();
-    this.dataAPI.getLoggers().then((loggers) => {
-      this.loggers = loggers;
-    });
-  }
+  ngOnInit() { }
 
   onClick(logger) {
     window.open(logger.url, '_blank');
   }
 }
-
