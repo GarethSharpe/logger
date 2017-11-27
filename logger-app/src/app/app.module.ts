@@ -23,10 +23,15 @@ import { AppComponent } from './app.component';
 import { BannerComponent } from './banner/banner.component';
 import { SidenavComponent } from './sidenav/sidenav.component'
 import { TableComponent } from './table/table.component';
-import { DialogComponent, DialogAddLoggerDialog, DialogRemoveLoggerDialog } from './add-logger-dialog/dialog.component';
 import { MapComponent } from './map/map.component';
 import { CardDisplayComponent } from './card-display/card-display.component';
+import { 
+  DialogComponent, 
+  DialogAddLoggerDialog, 
+  DialogRemoveLoggerDialog } from './add-logger-dialog/dialog.component';
+
 import { DataService } from './data.service';
+import { DialogLoginDialog } from './add-logger-dialog/dialog.component'
 
 @NgModule({
   declarations: [
@@ -37,6 +42,7 @@ import { DataService } from './data.service';
     DialogComponent,
     DialogAddLoggerDialog,
     DialogRemoveLoggerDialog,
+    DialogLoginDialog,
     MapComponent,
     CardDisplayComponent
   ],
@@ -62,7 +68,8 @@ import { DataService } from './data.service';
   ],
   entryComponents: [
   DialogAddLoggerDialog,
-  DialogRemoveLoggerDialog
+  DialogRemoveLoggerDialog,
+  DialogLoginDialog
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

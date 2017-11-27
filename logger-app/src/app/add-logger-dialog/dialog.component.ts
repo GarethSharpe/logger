@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { 
   MatDialog,
   MatDialogRef, 
@@ -6,22 +6,34 @@ import {
   MatSnackBar } from '@angular/material';
 
 import { DataService } from '../data.service';
+import * as firebase from "firebase";
 
 @Component({
   selector: 'app-logger-dialog',
   templateUrl: 'dialog.component.html'
 })
-export class DialogComponent {
+export class DialogComponent implements OnInit {
 
   logger: string;
   location: string;
   id: string;
   url: string;
 
+  email: string;
+  password: string;
+
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private dataAPI: DataService) { }
+
+  ngOnInit() {
+    let dialogRef = this.dialog.open(DialogLoginDialog, {
+      width: '300px',
+      data: { email: this.email, password: this.password },
+      disableClose: true
+    });
+  }
 
   openAddDialog(): void {
     let dialogRef = this.dialog.open(DialogAddLoggerDialog, {
@@ -63,9 +75,6 @@ export class DialogComponent {
       duration: 1000,
     });
   }
-
-
-
 }
 
 @Component({
@@ -95,5 +104,54 @@ export class DialogRemoveLoggerDialog {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'dialog-login-dialog',
+  templateUrl: 'dialog-login-dialog.html',
+})
+export class DialogLoginDialog {
+
+  email: string;
+  password: string;
+  errorFlag: boolean;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogLoginDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  public openLoginDialog() {
+  }
+
+  onLoginClick(data) {
+    console.log(data)
+    if (data.email.length < 4) {
+      alert('Please enter an email address.');
+      return;
+    }
+    if (data.password.length < 4) {
+      alert('Please enter a password.');
+      return;
+    }
+    firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+      });
+  }
+
+
+  openSnackBar() {
+    console.log("openSnackBar()");
+  }
+
+  onChangePasswordClick() {
+
   }
 }
