@@ -28,6 +28,8 @@ export class DialogComponent implements OnInit {
     private dataAPI: DataService) { }
 
   ngOnInit() {
+    if (firebase.auth().currentUser)
+        firebase.auth().signOut();
     let dialogRef = this.dialog.open(DialogLoginDialog, {
       width: '300px',
       data: { email: this.email, password: this.password },
@@ -115,9 +117,9 @@ export class DialogLoginDialog {
 
   email: string;
   password: string;
-  errorFlag: boolean;
 
   constructor(
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DialogLoginDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -125,33 +127,59 @@ export class DialogLoginDialog {
   }
 
   onLoginClick(data) {
-    console.log(data)
     if (data.email.length < 4) {
-      alert('Please enter an email address.');
+      this.snackBar.open("Please enter an email address.", "Done", {
+        duration: 3000,
+      });
       return;
     }
     if (data.password.length < 4) {
-      alert('Please enter a password.');
+      this.snackBar.open("Please enter a password.", "Done", {
+        duration: 3000,
+      });
       return;
     }
-    firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode === 'auth/wrong-password') {
-          alert('Wrong password.');
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
-      });
-  }
 
-
-  openSnackBar() {
-    console.log("openSnackBar()");
+    firebase.auth().signInWithEmailAndPassword(data.email, data.password).then((result) => {
+      this.dialogRef.close();
+      this.openSucessSnackBar(result.displayName);
+    }).catch((error) => {
+      this.openErrorSnackBar(error);
+    });
   }
 
   onChangePasswordClick() {
-
+    this.sendEmailVerification();
   }
+
+  sendEmailVerification() {
+    firebase.auth().currentUser.sendEmailVerification().then(() => {
+      this.openVerificationSnackBar();
+    });
+  }
+
+  openSucessSnackBar(name) {
+    this.snackBar.open("Hi, " + name + "! Verification succesful.", "Done", {
+      duration: 3000,
+    });
+  }
+
+  openErrorSnackBar(error) {
+    if (error.code === 'auth/wrong-password') {
+      this.snackBar.open("Wrong password", "Done", {
+        duration: 3000,
+      });
+    } else {
+      this.snackBar.open(error.message, "Done", {
+        duration: 3000,
+      });
+    }
+  }
+
+  openVerificationSnackBar() {
+    this.snackBar.open("Email Verification Sent!", "Done", {
+      duration: 3000,
+    });
+  }
+
 }
