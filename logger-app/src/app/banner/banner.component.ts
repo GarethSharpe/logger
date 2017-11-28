@@ -14,7 +14,12 @@ export class BannerComponent implements OnInit {
 
   constructor(private dataAPI: DataService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.dataAPI.getLoggers().then((loggers) => {
+      this.loggers = loggers;
+    });
+    this.loggerCache = this.dataAPI.getLoggerCache();
+  }
 
   onClick(logger) {
     window.open(logger.url, '_blank');
