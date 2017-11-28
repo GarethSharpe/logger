@@ -1,11 +1,26 @@
 html, body { height: 100%; padding: 0; margin: 0; }
 
-div { width: 50%;
+.container {
+	overflow: hidden;
+	width: 100%;
+	display: inline-block;
+	overflow: auto;
+}
+
+.map { 
+	min-width: 400px;
+	width: 50%;
 	height: 100%;
-	float: left;
     padding: 1em;
+    float: left;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    overflow: auto;
+}
+
+.table {
+	min-width: 400px;
+	width: 50%;
+	height: 100%;
+    padding: 1em;
+    float: left;
+    box-sizing: border-box;
 }

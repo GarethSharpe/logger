@@ -19,8 +19,8 @@
 .mat-form-field {
   font-size: 14px;
   flex-grow: 1;
-  margin-left: 32px;
-  margin-right: 32px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .mat-table {
