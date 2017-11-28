@@ -159,9 +159,8 @@ export class DialogLoginDialog {
   }
 
   sendEmailVerification() {
-    firebase.auth().currentUser.sendEmailVerification().then(() => {
-      this.openVerificationSnackBar();
-    });
+    this.openVerificationSnackBar();
+    firebase.auth().currentUser.sendEmailVerification();
   }
 
   openSucessSnackBar(identity) {

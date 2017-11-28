@@ -1,13 +1,22 @@
 <mat-toolbar color="primary">
+
   <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngFor="let logger of loggers;" (click)="onClick(logger)">{{logger.name}}
-    </button>
-    <button mat-menu-item *ngFor="let logger of loggerCache;" (click)="onClick(logger)">{{logger.name}}
-    </button>
+    <button mat-menu-item *ngFor="let logger of loggers;" (click)="onClick(logger)">{{logger.name}}</button>
+    <button mat-menu-item *ngFor="let logger of loggerCache;" (click)="onClick(logger)">{{logger.name}}</button>
   </mat-menu>
+
   <span class="header">Home</span>
   <span class="spacer"></span>
+
+  <button mat-icon-button [matMenuTriggerFor]="signOutMenu">
   <img class="user-image" src="https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg">
+  </button>
+  <mat-menu #signOutMenu="matMenu">
+    <button mat-menu-item (click)="onSignOutClick()">Sign Out</button>
+    <button mat-menu-item (click)="onChangePasswordClick()">Change Password</button>
+  </mat-menu>
+
   <mat-icon>verified_user</mat-icon>
+
 </mat-toolbar>
