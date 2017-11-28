@@ -145,7 +145,10 @@ export class DialogLoginDialog {
       this.dialogRef.close();
       const image = <HTMLImageElement> document.getElementsByClassName("user-image")[0];
       image.src = result.photoURL;
-      this.openSucessSnackBar(result.displayName);
+      var identity = result.displayName;
+      if (!identity)
+        identity = result.email;
+      this.openSucessSnackBar(identity);
     }).catch((error) => {
       this.openErrorSnackBar(error);
     });
@@ -161,8 +164,8 @@ export class DialogLoginDialog {
     });
   }
 
-  openSucessSnackBar(name) {
-    this.snackBar.open("Hi, " + name + "! Verification succesful.", "Done", {
+  openSucessSnackBar(identity) {
+    this.snackBar.open("Hi, " + identity + "! Verification succesful.", "Done", {
       duration: 3000,
     });
   }
