@@ -1,10 +1,11 @@
 <agm-map class="container mat-elevation-z8" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
   <agm-marker 
-  *ngFor="let logger of loggers"
-  [latitude]="logger.latlng.lat" [longitude]="logger.latlng.lng">
-  </agm-marker>
-  <agm-marker 
   *ngFor="let logger of loggerCache"
-  [latitude]="logger.latlng.lat" [longitude]="logger.latlng.lng">
+  [latitude]="logger.latlng.lat" 
+  [longitude]="logger.latlng.lng" 
+  [label]="logger.id.toString()">
+  	<agm-info-window #infoWindow>
+		<strong>{{logger.name}}</strong>
+	</agm-info-window>
   </agm-marker>
 </agm-map>
