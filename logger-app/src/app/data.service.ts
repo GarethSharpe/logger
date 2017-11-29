@@ -116,6 +116,7 @@ export class DataService {
             database_logger.latlng, 
             database_logger.url);
           loggers.push(logger);
+          this.pushLoggerCache(logger);
         }
         this.loggerId = loggers.length + 1;
         resolve(loggers);
