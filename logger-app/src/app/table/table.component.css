@@ -27,3 +27,8 @@
   overflow: auto;
   max-height: 80vh;
 }
+
+/* Column Widths */
+.mat-column-loggerId {
+  max-width: 64px;
+}
