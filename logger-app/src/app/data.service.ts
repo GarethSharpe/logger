@@ -79,14 +79,14 @@ export class DataService {
 
   /** Removes a logger from the database. */
   deleteLogger(id: string) {
+    var i = 0; var found = false;
+    while (i < this.loggerCache.length && this.loggerCache[i].id != id)
+      i++;
+    this.loggerCache.splice(i, 1);
     var copiedData = this.data.slice();
     copiedData = copiedData.filter(item => item.id != id);
     this.dataChange.next(copiedData);
     firebase.database().ref('/').child(id).remove();
-    // Also remove from cache
-    // var index = this.loggerCache.indexOf(logger, 0);
-    // if (index > -1)
-    //   this.loggerCache.splice(index, 1);
   }
 
   /** Builds and returns a new Logger. */
