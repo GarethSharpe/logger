@@ -120,7 +120,7 @@ export class DialogLoginDialog {
 
   constructor(
     private snackBar: MatSnackBar,
-    private dataService: DataService,
+    private dataAPI: DataService,
     public dialogRef: MatDialogRef<DialogLoginDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -142,6 +142,7 @@ export class DialogLoginDialog {
     }
 
     firebase.auth().signInWithEmailAndPassword(data.email, data.password).then((result) => {
+      this.dataAPI.getLoggers();
       this.dialogRef.close();
       const image = <HTMLImageElement> document.getElementsByClassName("user-image")[0];
       image.src = result.photoURL;

@@ -14,7 +14,7 @@ export interface LoggerData {
 @Injectable()
 export class DataService {
 
-  loggerId: number;
+  loggerId: number = 1;
   loggerCache: LoggerData[] = [];
   dataChange: any;
 
@@ -29,7 +29,8 @@ export class DataService {
   getLoggers():Promise<LoggerData[]> {
     return new Promise((resolve, reject) => {
       this.readDatabase().then((loggers) => {
-      resolve(loggers);
+        this.dataChange.next(loggers);
+        resolve(loggers);
       });
     });
   }
@@ -93,10 +94,10 @@ export class DataService {
   createNewLogger(name, location, url):Promise<LoggerData> {
     return new Promise((resolve, reject) => {
       const id = this.loggerId++;
+      console.log(this.loggerId);
       this.Geocode(location).then(latlng => {
       const progress = Math.round(Math.random() * 100).toString();
       const logger = this.readLogger(id, name, progress, location, latlng, url);
-      console.log(logger);
       resolve(logger);
       });
     })
@@ -117,8 +118,8 @@ export class DataService {
             database_logger.url);
           loggers.push(logger);
           this.pushLoggerCache(logger);
+          this.loggerId++;
         }
-        this.loggerId = loggers.length + 1;
         resolve(loggers);
       });
     });

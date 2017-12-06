@@ -54,7 +54,7 @@ export class TableComponent {
   }
 }
 
-/** An example database that the data source uses to retrieve data for the table. */
+/* A database that the data source uses to retrieve data for the table. */
 export class LoggerDatabase {
   /** Stream that emits whenever the data has been modified. */
   dataChange: BehaviorSubject<LoggerData[]> = new BehaviorSubject<LoggerData[]>([]);
@@ -62,20 +62,8 @@ export class LoggerDatabase {
 
   constructor(private dataAPI: DataService) { }
 
-  public refreshTable():Promise<any> {
+  public refreshTable() {
     this.dataAPI.subscribeDataChangeListener(this.dataChange);
-    return new Promise((resolve, reject) => {
-      this.dataAPI.getLoggers().then((result) => {
-        var loggers = result;
-        var n = loggers.length;
-        for (var i = 0; i < n; i++) {
-            const copiedData = this.data.slice();
-            copiedData.push(loggers[i]);
-            this.dataChange.next(copiedData);
-        }
-      })
-      resolve();
-    });
   }
 
 }
