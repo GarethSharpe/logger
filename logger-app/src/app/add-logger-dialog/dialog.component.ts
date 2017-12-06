@@ -44,7 +44,6 @@ export class DialogComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result.logger != null && result.location != null && result.url != null) {
       	this.dataAPI.createNewLogger(
           result.logger,
@@ -64,7 +63,6 @@ export class DialogComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       if (result.id != null) {
         this.dataAPI.deleteLogger(result.id);
         this.openSnackBar();

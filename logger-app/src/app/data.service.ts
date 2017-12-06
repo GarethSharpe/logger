@@ -44,7 +44,8 @@ export class DataService {
     const copiedData = this.data.slice();
     copiedData.push(logger);
     this.dataChange.next(copiedData);
-    firebase.database().ref('/' + logger.id).set({
+    const email = this.encodeEmail(firebase.auth().currentUser.email);
+    firebase.database().ref(email).child(logger.id).set({
       id: logger.id,
       name: logger.name,
       progress: logger.progress,
@@ -56,7 +57,8 @@ export class DataService {
 
   getLogger(id: string):Promise<LoggerData> {
     return new Promise((resolve, reject) => {
-      firebase.database().ref('/').once("value").then((loggersSnapshot) => {
+      const email = this.encodeEmail(firebase.auth().currentUser.email);
+      firebase.database().ref(email).once("value").then((loggersSnapshot) => {
         for (var key in loggersSnapshot.val()) {
           var database_logger = loggersSnapshot.val()[key]
           if (database_logger.id == id) {
@@ -87,14 +89,14 @@ export class DataService {
     var copiedData = this.data.slice();
     copiedData = copiedData.filter(item => item.id != id);
     this.dataChange.next(copiedData);
-    firebase.database().ref('/').child(id).remove();
+    const email = this.encodeEmail(firebase.auth().currentUser.email);
+    firebase.database().ref(email).child(id).remove();
   }
 
   /** Builds and returns a new Logger. */
   createNewLogger(name, location, url):Promise<LoggerData> {
     return new Promise((resolve, reject) => {
       const id = this.loggerId++;
-      console.log(this.loggerId);
       this.Geocode(location).then(latlng => {
       const progress = Math.round(Math.random() * 100).toString();
       const logger = this.readLogger(id, name, progress, location, latlng, url);
@@ -106,7 +108,8 @@ export class DataService {
   readDatabase():Promise<LoggerData> {
     return new Promise((resolve, reject) => {
       var loggers = []; 
-      firebase.database().ref('/').once("value").then((loggersSnapshot) => {
+      const email = this.encodeEmail(firebase.auth().currentUser.email);
+      firebase.database().ref(email).once("value").then((loggersSnapshot) => {
         for (var key in loggersSnapshot.val()) {
           const database_logger = loggersSnapshot.val()[key]
           const logger = this.readLogger(
@@ -156,6 +159,10 @@ export class DataService {
         resolve(latlng);
       });
     })
+  }
+
+  encodeEmail(email: string) {
+    return email.replace('.', '-');
   }
 
 }
