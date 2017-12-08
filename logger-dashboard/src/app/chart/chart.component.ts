@@ -33,14 +33,21 @@ export class ChartComponent {
         this.chartService.setChart(this.myChart);
         var dataRef = firebase.database().ref('/garethjsharpe@gmail-com/data').once('value').then(snapshot => {
         var length = snapshot.val().length;
-        // 8640 represents 24hrs (10s intervals)
-        if (length > 360) {
-            while (length > 0) {
-                var database_data = JSON.parse(snapshot.val()[length--]);
-                this.data.push(database_data);
+        console.log(length);
+        if (length >= 262800) {
+            firebase.database().ref('/garethjsharpe@gmail-com').child('data').remove();
+        } 
+        else if (length > 360) {
+            var i = 0;
+            for (var key in snapshot.val()) {
+                i += 1;
+                if (i > (length - 360)) {
+                    var database_data = JSON.parse(snapshot.val()[key]);
+                    this.data.push(database_data);
+                }
             }
-            this.data.reverse();
-        } else {
+        } 
+        else {
             for (var key in snapshot.val()) {
                 var database_data = JSON.parse(snapshot.val()[key]);
                 this.data.push(database_data);

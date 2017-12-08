@@ -62,9 +62,8 @@ try:
         email = to_email.replace('.', '-')
 
         # write data to firebase
-        i += 1
         firebase.put('/' + email, 'current', firebase_data)
-        firebase.put('/' + email, 'data/' + str(i), firebase_data)
+        firebase.put('/' + email, 'data/', firebase_data)
         firebase.put('/' + email, 'power', power_data)
 
         # write data to the necessary files
@@ -104,8 +103,6 @@ try:
             writer.writerow(header)
             chart_log.close();
             chart_log = utilities.setup_chart_log()
-            firebase.delete(email + '/data')
-            i = 0
 
         # TODO: change to one second if applicable
         # wait ten second
