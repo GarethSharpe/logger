@@ -1,6 +1,7 @@
 ﻿import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -10,7 +11,10 @@ import {
   MatButtonModule, 
   MatToolbarModule,
   MatIconModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatInputModule,
+  MatDialogModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -20,6 +24,8 @@ import { GaugeComponent } from './gauge/gauge.component';
 import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxchart';
 import { jqxGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxgauge';
 import { jqxLinearGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxlineargauge';
+import { DialogsComponent,
+         DialogLoginDialog } from './dialogs/dialogs.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +35,9 @@ import { jqxLinearGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angula
       jqxLinearGaugeComponent, 
       ChartComponent, 
       BannerComponent, 
-      GaugeComponent
+      GaugeComponent, 
+      DialogsComponent,
+      DialogLoginDialog
   ],
   imports: [
     BrowserModule,
@@ -38,7 +46,14 @@ import { jqxLinearGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angula
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
-    HttpClientModule
+    MatInputModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    HttpClientModule,
+    FormsModule
+  ],
+  entryComponents: [
+    DialogLoginDialog
   ],
   providers: [ChartService],
   bootstrap: [AppComponent]

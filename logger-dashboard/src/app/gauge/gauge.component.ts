@@ -10,6 +10,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { jqxGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxgauge';
 import { jqxLinearGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxlineargauge';
 
+import * as firebase from "firebase";
+
 @Component({
   selector: 'app-gauge',
   templateUrl: './gauge.component.html',
@@ -18,15 +20,9 @@ import { jqxLinearGaugeComponent } from 'jqwidgets-framework/jqwidgets-ts/angula
 
 export class GaugeComponent {
 	@ViewChild('powerGauge') powerGauge: jqxGaugeComponent; 
-    // @ViewChild('myLinearTempGauge') myLinearTempGauge: jqxLinearGaugeComponent;
-    // @ViewChild('myLinearPressureGauge') myLinearPressureGauge: jqxLinearGaugeComponent;
-    // @ViewChild('myLinearFlowGauge') myLinearFlowGauge: jqxLinearGaugeComponent;
-    // @ViewChild('gaugeValue') gaugeValue: ElementRef;
 
     private gauge: any;
-    // private temperature: any;
-    // private flow: any;
-    // private pressure: any;
+    private power: number;
 
     constructor(private http: HttpClient) { }
 
@@ -36,26 +32,13 @@ export class GaugeComponent {
         this.powerGauge.height(55);
         this.powerGauge.radius(30);
 
-        this.http.get("./assets/gauge.txt", {responseType: 'text'}).subscribe(data => { 
-            this.gauge = Number(data)
-            // console.log(this.gauge)
-            this.powerGauge.value(this.gauge);
-        });
-
-        // this.http.get("./assets/flow.txt", {responseType: 'text'}).subscribe(data => { 
-        //     this.flow = Number(data)
-        //     this.myLinearFlowGauge.value(this.flow);
-        // });
-
-        // this.http.get("./assets/pressure.txt", {responseType: 'text'}).subscribe(data => { 
-        //     this.pressure = Number(data)
-        //     this.myLinearPressureGauge.value(this.pressure);
-        // });
-
-        // this.http.get("./assets/temperature.txt", {responseType: 'text'}).subscribe(data => { 
-        //     this.temperature = Number(data)
-        //     this.myLinearTempGauge.value(this.temperature);
-        // });
+        let timer = setInterval(() => {
+            firebase.database().ref('/garethjsharpe@gmail-com/power').once('value').then(snapshot => {
+                this.power = snapshot.val();
+                this.power = Math.round(this.power * 100) / 100
+                this.powerGauge.value(this.power);
+            });
+        }, 10000)
     }
 
     ticksMinor: any = { interval: 0.25, size: '5%' };
@@ -78,31 +61,4 @@ export class GaugeComponent {
     ticksMinorLinear: any = { size: '5%', interval: 2.5, style: { 'stroke-width': 1, stroke: '#aaaaaa' } };
 
     ticksMajorLinear: any = { size: '10%', interval: 10 };
-
-//     labels: any = {
-//         interval: 20,
-//         formatValue: (value: number, position: string): string => {
-//             if (position === 'far') {
-//                 value = (9 / 5) * value + 32;
-//                 if (value === -76) {
-//                     return 'F';
-//                 }
-//                 return value + '';
-//             }
-//             if (value === -60) {
-//                 return 'C';
-//             }
-//             return value + '';
-//         }
-//     };
-
-// rangesLinear: any[] = [
-//         { startValue: -10, endValue: 10, style: { fill: '#FFF157', stroke: '#FFF157' } },
-//         { startValue: 10, endValue: 35, style: { fill: '#FFA200', stroke: '#FFA200' } },
-//         { startValue: 35, endValue: 60, style: { fill: '#FF4800', stroke: '#FF4800' } }
-//     ];
-
-    // onValueChanging(event: any): void {
-    //     this.gaugeValue.nativeElement.innerHTML = Math.round(event.args.value) + ' kph';
-    // }
 }

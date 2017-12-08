@@ -40,10 +40,11 @@ def get_sensor_data():
     s3_data = random.uniform(3, 4) # DAQC.getADC(ADDRESS, 2)
     s4_data = random.uniform(4, 5) # DAQC.getADC(ADDRESS, 3)
     s5_data = random.uniform(5, 6) # DAQC.getADC(ADDRESS, 4)
+    s6_data = random.uniform(3, 5.5) # get power consumption
 
     # TODO: implement formatting functions
     # temp = round((temp_data - 2.73) * 100, 2)
-    return [timestamp, s1_data, s2_data, s3_data, s4_data, s5_data]
+    return [timestamp, s1_data, s2_data, s3_data, s4_data, s5_data, s6_data]
 
 # create discharge function for reading capacitor data
 def discharge(out_pin):

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="height: 100%;">
 <head>
   <meta charset="utf-8">
   <title>CreateJqwidgetsAngularApp</title>
@@ -10,7 +10,25 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
-<body style="background-color: rgb(250, 250, 250); margin: 0px;"  layout-fill>
+<body style="background-color: rgb(250, 250, 250); margin: 0px; height: 100%"  layout-fill>
   <app-root></app-root>
 </body>
 </html>
+
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase-firestore.js"></script>
+
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCeo_fnHfA_UXzgIQqnIqKeOVJqK2D2dik",
+    authDomain: "logger-dashboard.firebaseapp.com",
+    databaseURL: "https://logger-dashboard.firebaseio.com",
+    projectId: "logger-dashboard",
+    storageBucket: "logger-dashboard.appspot.com",
+    messagingSenderId: "520818614985"
+  };
+  firebase.initializeApp(config);
+</script>

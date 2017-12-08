@@ -48,10 +48,6 @@ export class BannerComponent implements OnInit {
     }
   }
 
-  refresh() {
-    this.chartService.refreshChart();
-  }
-
   saveAsPng() {
     this.chartService.saveAsPng();
   }

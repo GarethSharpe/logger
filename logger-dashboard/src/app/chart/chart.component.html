@@ -1,9 +1,10 @@
-<jqxChart #myChart
-          [width]="1350" [height]="650"
+<jqxChart #myChart class="container"
+		  [source]="data"
+          [width]="'100%'" [height]="'100%'"
           [title]="'Current Logger Performance'"
           [description]="'Test Data Logger'"
-          [showLegend]="true" [enableAnimations]="true" [animationDuration]="3000" [padding]="padding"
-          [titlePadding]="titlePadding" [source]="dataAdapter" [xAxis]="xAxis"
+          [showLegend]="true" [enableAnimations]="false" [animationDuration]="3000" [padding]="padding"
+          [titlePadding]="titlePadding" [xAxis]="xAxis"
           [valueAxis]="valueAxis" [seriesGroups]="seriesGroups" [colorScheme]="'scheme01'"
           [enableAxisTextAnimation]="true" [borderLineWidth]="0.5">
 </jqxChart>

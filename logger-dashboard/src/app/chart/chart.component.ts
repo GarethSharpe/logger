@@ -3,6 +3,19 @@ import { jqxChartComponent } from 'jqwidgets-framework/jqwidgets-ts/angular_jqxc
 import { Observable } from 'rxjs/Rx';
 import { ChartService } from "../chart.service";
 
+import * as firebase from "firebase";
+
+var config = {
+    apiKey: "AIzaSyCeo_fnHfA_UXzgIQqnIqKeOVJqK2D2dik",
+    authDomain: "logger-dashboard.firebaseapp.com",
+    databaseURL: "https://logger-dashboard.firebaseio.com",
+    projectId: "logger-dashboard",
+    storageBucket: "logger-dashboard.appspot.com",
+    messagingSenderId: "520818614985"
+  };
+
+firebase.initializeApp(config);
+
 @Component({
     selector: 'app-chart',
     templateUrl: './chart.component.html',
@@ -12,40 +25,53 @@ import { ChartService } from "../chart.service";
 export class ChartComponent {
     @ViewChild('myChart') myChart: jqxChartComponent;
 
-    constructor(private chartService: ChartService) { } 
+    data = [];
 
-    source: any =
-    {
-        datatype: "csv",
-        datafields: [
-            { name: 'Time Stamp' },
-            { name: 'Temperature' },
-            { name: 'Humidity' },
-            { name: 'Light' },
-            { name: 'Pressure' },
-            { name: 'Flow' }
-        ],
-        url: './assets/log.csv'
-    };
- 
-    dataAdapter: any = new jqx.dataAdapter(this.source, { async: false, autoBind: true, loadError: (xhr, status, error) => { alert('Error loading "' + this.source.url + '" : ' + error); } });
+    constructor(private chartService: ChartService) { } 
 
     ngAfterViewInit() {
         this.chartService.setChart(this.myChart);
+        var dataRef = firebase.database().ref('/garethjsharpe@gmail-com/data').once('value').then(snapshot => {
+        var length = snapshot.val().length;
+        // 8640 represents 24hrs (10s intervals)
+        if (length > 360) {
+            while (length > 0) {
+                var database_data = JSON.parse(snapshot.val()[length--]);
+                this.data.push(database_data);
+            }
+            this.data.reverse();
+        } else {
+            for (var key in snapshot.val()) {
+                var database_data = JSON.parse(snapshot.val()[key]);
+                this.data.push(database_data);
+            }
+        }
+        this.myChart.refresh();
+      });
+
+      let timer = setInterval(() => {
+        firebase.database().ref('/garethjsharpe@gmail-com/current').once('value').then(snapshot => {
+            if (this.data.length > 360)
+                this.data.shift();
+            this.data.push(JSON.parse(snapshot.val()));
+            this.myChart.refresh();
+        });
+      }, 10000)
     }
 
     xAxis: any =
     {
-        dataField: 'Time Stamp',
+        dataField: 'date',
+        displayText: 'Time',
         type: 'date',
-        baseUnit: 'second',
+        baseUnit: 'minute',
         valuesOnTicks: true,
         tickMarks: {
             visible: true,
-            interval: 1,
+            interval: 10,
             color: '#BCBCBC'
         },
-        unitInterval: 100,
+        unitInterval: 1,
         formatFunction: (value: any) => {
             return jqx.dataFormat.formatdate(value, 'hh:mm:ss', 'en-us');
         },
@@ -65,20 +91,21 @@ export class ChartComponent {
     {
         visible: true,
         title: { text: 'Current Value<br>' },
-        tickMarks: { color: '#BCBCBC' }
+        tickMarks: { color: '#BCBCBC' },
+        axisSize: 'auto'
     };
     
     seriesGroups: any[] =
     [
         {
-            type: 'line',
-            lineWidth: 2,
+            type: 'spline',
+            lineWidth: 0.5,
             series: [
-                { dataField: 'Temperature', displayText: 'Temperature' },
-                { dataField: 'Humidity', displayText: 'Humidity' },
-                { dataField: 'Light', displayText: 'Light' },
-                { dataField: 'Pressure', displayText: 'Pressure' },
-                { dataField: 'Flow', displayText: 'Flow' },
+                { dataField: 'temperature', displayText: 'Temperature' },
+                { dataField: 'humidity', displayText: 'Humidity' },
+                { dataField: 'light', displayText: 'Light' },
+                { dataField: 'pressure', displayText: 'Pressure' },
+                { dataField: 'flow', displayText: 'Flow' },
             ]
         }
     ];

@@ -13,9 +13,6 @@ import {
   MatTableModule,
   MatInputModule,
   MatDialogModule,
-  MatCardModule,
-  MatChipsModule,
-  MatProgressSpinnerModule,
   MatSnackBarModule
 } from '@angular/material';
 
@@ -37,7 +34,6 @@ import { DialogLoginDialog } from './add-logger-dialog/dialog.component'
   declarations: [
     AppComponent,
     BannerComponent,
-    SidenavComponent,
     TableComponent,
     DialogComponent,
     DialogAddLoggerDialog,
@@ -61,9 +57,6 @@ import { DialogLoginDialog } from './add-logger-dialog/dialog.component'
     MatInputModule,
     MatDialogModule,
     FormsModule,
-    MatCardModule,
-    MatChipsModule,
-    MatProgressSpinnerModule,
     MatSnackBarModule
   ],
   entryComponents: [

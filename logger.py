@@ -10,11 +10,15 @@ import csv
 import utilities
 import sensors
 
-
+from classes import LoggerData
+from firebase import firebase
 from time import sleep
 
 # testing
 import random
+
+# create firebase reference
+firebase = firebase.FirebaseApplication('https://logger-dashboard.firebaseio.com', None)
 
 # initialize date variables
 hour, month, year = utilities.get_time()
@@ -41,6 +45,7 @@ chart_writer = csv.writer(chart_log)
 upload_hour = hour + 1
 upload_month = month + 1
 wipe_year = year + 1
+i = 0
 
 # setup headers of file
 header = utilities.get_header(sensors.SENSORS)
@@ -50,7 +55,6 @@ writer.writerow(header)
 print("file name:", file_name)
 print("current year", wipe_year - 1)
 print("wipe year:", wipe_year)
-print(header)
 
 # intialize times to send email
 noon = 12
@@ -67,6 +71,13 @@ try:
 
         # get data from sensors
         data = sensors.get_sensor_data()
+        firebaseData = LoggerData(data).toJSON()
+        powerData = LoggerData(data).power
+        email = to_email.replace('.', '-')
+        i += 1
+        firebase.put('/' + email, 'current', firebaseData)
+        firebase.put('/' + email, 'data/' + str(i), firebaseData)
+        firebase.put('/' + email, 'power', powerData)
 
         # write data to the necessary files
         writer.writerow(data)
@@ -91,9 +102,6 @@ try:
 
         # rewind certain files for overwrite
         gauge_log.seek(0)
-
-        # print the data (for testing)
-        print(data)
 
         # update hour and month
         hour, month, _ = utilities.get_time()
@@ -139,6 +147,8 @@ try:
             writer.writerow(header)
             chart_log.close();
             chart_log = utilities.setup_chart_log()
+            firebase.delete(email + '/data')
+            i = 0
 
         # TODO: change to one second if applicable
         # wait five second
