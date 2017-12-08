@@ -33,7 +33,6 @@ file, file_name, logger = utilities.setup_file(month, year)
 writer = csv.writer(file)
 
 # initialize upload/wipe times
-upload_hour = hour + 1
 upload_month = month + 1
 wipe_year = year + 1
 i = 0
@@ -101,8 +100,6 @@ try:
             file, file_name = utilities.setup_file(month, year)
             writer = csv.writer(file)
             writer.writerow(header)
-            chart_log.close();
-            chart_log = utilities.setup_chart_log()
 
         # TODO: change to one second if applicable
         # wait ten second
