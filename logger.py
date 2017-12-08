@@ -26,20 +26,11 @@ hour, month, year = utilities.get_time()
 # setup necessary elements
 smtp, from_email, to_email = utilities.setup_email()
 
-# REMOVED FEATURE
-# dbx = utilities.setup_dropbox()
-
 # setup logs and files
 file, file_name, logger = utilities.setup_file(month, year)
-chart_log = utilities.setup_chart_log()
-gauge_log = utilities.setup_gauge_log()
-
-# FUTURE FEATURE
-# temperature_log, flow_log, pressure_log = utilities.setup_line_gauge_logs()
 
 # setup writers
 writer = csv.writer(file)
-chart_writer = csv.writer(chart_log)
 
 # initialize upload/wipe times
 upload_hour = hour + 1
@@ -50,11 +41,6 @@ i = 0
 # setup headers of file
 header = utilities.get_header(sensors.SENSORS)
 writer.writerow(header)
-
-# console print (for testing)
-print("file name:", file_name)
-print("current year", wipe_year - 1)
-print("wipe year:", wipe_year)
 
 # intialize times to send email
 noon = 12
@@ -71,37 +57,19 @@ try:
 
         # get data from sensors
         data = sensors.get_sensor_data()
-        firebaseData = LoggerData(data).toJSON()
-        powerData = LoggerData(data).power
+        firebase_data = LoggerData(data).toJSON()
+        power_data = LoggerData(data).power
         email = to_email.replace('.', '-')
+
+        # write data to firebase
         i += 1
-        firebase.put('/' + email, 'current', firebaseData)
-        firebase.put('/' + email, 'data/' + str(i), firebaseData)
-        firebase.put('/' + email, 'power', powerData)
+        firebase.put('/' + email, 'current', firebase_data)
+        firebase.put('/' + email, 'data/' + str(i), firebase_data)
+        firebase.put('/' + email, 'power', power_data)
 
         # write data to the necessary files
         writer.writerow(data)
-        chart_writer.writerow(data)
-        gauge_log.write("{}".format(random.uniform(4, 5))) # TODO: get power output from Pi
-
-        # FUTURE FEATURE
-        # temperature_log.write("{}".format(data[1]))
-        # flow_log.write("{}".format(data[5]))
-        # pressure_log.write("{}".format(data[4]))
-        # temperature_log.flush()
-        # flow_log.flush()
-        # pressure_log.flush()
-        # temperature_log.seek(0)
-        # flow_log.seek(0)
-        # pressure_log.seek(0)
-
-        # flush all files
         file.flush()
-        chart_log.flush()
-        gauge_log.flush()
-
-        # rewind certain files for overwrite
-        gauge_log.seek(0)
 
         # update hour and month
         hour, month, _ = utilities.get_time()
@@ -125,22 +93,11 @@ try:
         # update emailed_today variable 
         if emailed_today and not (hour == noon or hour == midnight):
             emailed_today = False
-        
-        # REMOVED FEATURE
-        # upload the file to dropbox every hour        
-        # if hour == upload_hour:
-        #     file.seek(0)
-        #     dbx.files_upload(str.encode(file.read()), '/' + logger + '/' + file_name, dropbox.files.WriteMode.overwrite, mute=True)
-        #     upload_hour = (hour + 1) % 24
 
-        # CONTAINS REMOVED FEATURES
         # if the file has been open for one month, upload to dropbox 
         # and delete file. After file deletion, setup next file        
         if month == upload_month:
-            # file.seek(0)
-            # dbx.files_upload(str.encode(file.read()), '/' + logger + '/' + file_name)
             file.close()
-            # os.remove(file)
             upload_month = month + 1
             file, file_name = utilities.setup_file(month, year)
             writer = csv.writer(file)
@@ -151,7 +108,7 @@ try:
             i = 0
 
         # TODO: change to one second if applicable
-        # wait five second
+        # wait ten second
         sleep(10)
 except KeyboardInterrupt:
     sleep(.1)

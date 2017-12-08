@@ -71,12 +71,12 @@ export class ChartComponent {
             interval: 10,
             color: '#BCBCBC'
         },
-        unitInterval: 1,
+        unitInterval: 10,
         formatFunction: (value: any) => {
             return jqx.dataFormat.formatdate(value, 'hh:mm:ss', 'en-us');
         },
         gridLines: {
-            visible: true,
+            visible: false,
             interval: 3,
             color: '#BCBCBC'
         },
