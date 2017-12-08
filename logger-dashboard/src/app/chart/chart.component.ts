@@ -58,8 +58,11 @@ export class ChartComponent {
 
       let timer = setInterval(() => {
         firebase.database().ref('/garethjsharpe@gmail-com/current').once('value').then(snapshot => {
-            if (this.data.length > 180)
-                this.data.shift();
+            console.log(this.data.length);
+            if (this.data.length >= 175) {
+                var x = this.data.shift()
+                console.log(x);
+            }
             this.data.push(JSON.parse(snapshot.val()));
             this.myChart.refresh();
         });
