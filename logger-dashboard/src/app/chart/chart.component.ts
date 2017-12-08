@@ -33,7 +33,6 @@ export class ChartComponent {
         this.chartService.setChart(this.myChart);
         var dataRef = firebase.database().ref('/garethjsharpe@gmail-com/data').once('value').then(snapshot => {
         var length = snapshot.val().length;
-        console.log(length);
         if (length >= 262800) {
             firebase.database().ref('/garethjsharpe@gmail-com').child('data').remove();
         } 
@@ -58,11 +57,8 @@ export class ChartComponent {
 
       let timer = setInterval(() => {
         firebase.database().ref('/garethjsharpe@gmail-com/current').once('value').then(snapshot => {
-            console.log(this.data.length);
-            if (this.data.length >= 175) {
-                var x = this.data.shift()
-                console.log(x);
-            }
+            if (this.data.length >= 175)
+                this.data.shift()
             this.data.push(JSON.parse(snapshot.val()));
             this.myChart.refresh();
         });
