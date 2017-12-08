@@ -37,11 +37,11 @@ export class ChartComponent {
         if (length >= 262800) {
             firebase.database().ref('/garethjsharpe@gmail-com').child('data').remove();
         } 
-        else if (length > 360) {
+        else if (length > 180) {
             var i = 0;
             for (var key in snapshot.val()) {
                 i += 1;
-                if (i > (length - 360)) {
+                if (i > (length - 180)) {
                     var database_data = JSON.parse(snapshot.val()[key]);
                     this.data.push(database_data);
                 }
