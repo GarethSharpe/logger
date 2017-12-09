@@ -2,8 +2,10 @@
   <button mat-icon-button (click)="goHome()"><mat-icon>home</mat-icon></button>
   <span class="header">Dashboard</span>
   <span class="spacer"></span>
-  <button mat-mini-fab color="accent" class="icon" matTooltip="Download All Logs"(click)="downloadFolder()"><mat-icon>folder</mat-icon></button>
-  <button mat-mini-fab color="accent" class="icon" matTooltip="Download Log"(click)="downloadFile()"><mat-icon>file_download</mat-icon></button>
+  <button mat-mini-fab color="accent" class="icon" matTooltip="Download Logs" [matMenuTriggerFor]="menu"><mat-icon>folder</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item style="width: 100%;" *ngFor="let month of months;" (click)="downloadFile(month)">{{month}}</button>
+  </mat-menu>
   <button mat-mini-fab color="accent" class="icon" matTooltip="Save Chart"(click)="saveAsPng()"><mat-icon>camera</mat-icon></button>
   <app-gauge></app-gauge>
 </mat-toolbar><div class="me" matTooltip="................................|Gareth Sharpe, 2017"></div>

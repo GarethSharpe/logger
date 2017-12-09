@@ -12,6 +12,10 @@ import { saveAs } from 'file-saver/FileSaver';
 export class BannerComponent implements OnInit {
 
    private MONTHS = 12;
+   private months = ["January", "February", "March", 
+                     "April", "May", "June", "July", 
+                     "August", "September", "October",
+                     "November", "December"];
 
   constructor(private chartService: ChartService) { }
 
@@ -21,31 +25,18 @@ export class BannerComponent implements OnInit {
   	window.open("https://logger-gsjj.firebaseapp.com/", '_blank');
   }
 
-  downloadFile() {
-    var path = "././assets/log.csv";
+  downloadFile(month) {
+    var i = 0;
+    while (this.months[i] != month)
+      i++;
+    var path = "././assets/log-" + (i + 1) + ".csv";
+    console.log(path);
     window.fetch(path).then(response => {
       response.blob().then(fileBlob => {
         console.log(fileBlob);
-        saveAs(fileBlob, "log.csv");
-      })
-    })
-  }
-
-  downloadFolder() {
-    this.getFileBlobs();
-  }
-
-  getFileBlobs() {
-    for (var i = 1; i < this.MONTHS; i++) {
-      var name = "log-" + i.toString() + ".csv";
-      var path = "././assets/" + name;
-      window.fetch(path).then(response => {
-        response.blob().then(fileBlob => {
-          //console.log(fileBlob);
-          saveAs(fileBlob, name);
-        });
+        saveAs(fileBlob, month + "-log.csv");
       });
-    }
+    });
   }
 
   saveAsPng() {

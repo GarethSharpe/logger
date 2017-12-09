@@ -14,7 +14,8 @@ import {
   MatTooltipModule,
   MatInputModule,
   MatDialogModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatMenuModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -49,6 +50,7 @@ import { DialogsComponent,
     MatInputModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatMenuModule,
     HttpClientModule,
     FormsModule
   ],

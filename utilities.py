@@ -68,23 +68,3 @@ def get_header(sensors):
     for sensor in sensors:
         header.append(sensor)
     return header
-
-def setup_chart_log():
-    path_to_log = 'logger-dashboard/src/assets/log.csv'
-    file = open(path_to_log, 'w', newline='')
-    return file
-
-def setup_gauge_log():
-    path_to_log = 'logger-dashboard/src/assets/gauge.txt'
-    file = open(path_to_log, 'w', newline='')
-    return file
-
-def setup_line_gauge_logs():
-    path_to_temperature = 'logger-dashboard/src/assets/temperature.txt'
-    path_to_flow = 'logger-dashboard/src/assets/flow.txt'
-    path_to_pressure = 'logger-dashboard/src/assets/pressure.txt'
-    temperature = open(path_to_temperature, 'w')
-    flow = open(path_to_flow, 'w')
-    pressure = open(path_to_pressure, 'w')
-    return temperature, flow, pressure
-

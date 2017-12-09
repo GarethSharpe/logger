@@ -12,7 +12,7 @@ import random
 
 # define sensor constants
 NUM_SENSORS = 5
-SENSORS = ["Temperature", "Humidity", "Light", "Pressure", "Flow"]
+SENSORS = ["Temperature", "Humidity", "Light", "Pressure", "Flow", "Power"]
 MAX_ERROR_VALUES = [10, 20, 30, 40, 50]
 MIN_ERROR_VALUES = [0, 0, 0, 0, 0]
 
@@ -68,7 +68,4 @@ def is_error(data):
             errors_data.append(data[sensor])
             errors_sensors.append(SENSORS[sensor])
     return error_data, error_sensors
-    
-
-
 	
