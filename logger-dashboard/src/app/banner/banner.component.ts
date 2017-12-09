@@ -30,7 +30,6 @@ export class BannerComponent implements OnInit {
     while (this.months[i] != month)
       i++;
     var path = "././assets/log-" + (i + 1) + ".csv";
-    console.log(path);
     window.fetch(path).then(response => {
       response.blob().then(fileBlob => {
         console.log(fileBlob);
