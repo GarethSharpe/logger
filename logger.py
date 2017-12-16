@@ -87,9 +87,12 @@ try:
         # TODO: update error 
         # TODO: update send_warning_email() to take error_data and error_sensors
         if error == True and (hour == noon or hour == midnight) and not emailed_today:
-            utilities.send_warning_email(smtp, from_email, to_email, error_data, error_sensors, logger)
-            emailed_today = True
-            error = False
+            try:
+                utilities.send_warning_email(smtp, from_email, to_email, error_data, error_sensors, logger)
+                emailed_today = True
+                error = False
+            except:
+                print("Failed to send email.")
         
         # if the user has been emailed but not in the past 12 hours,
         # update emailed_today variable 
