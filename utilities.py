@@ -7,16 +7,14 @@ Created on Oct 16, 2017
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
-from smtplib import SMTP
-
+from smtplib import SMTP_SSL
 from datetime import datetime
 
 import dropbox
 
 def setup_email():
-    smtp = SMTP('smtp.gmail.com', 587)
+    smtp = SMTP_SSL('smtp.gmail.com')
     smtp.ehlo()
-    smtp.starttls()
     from_email = "data.monitor.service@gmail.com"
     pswrd = input("password: ")
     to_email = input("email: ")

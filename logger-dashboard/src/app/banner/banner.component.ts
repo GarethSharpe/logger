@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartService } from "../chart.service";
+import { ChartService } from '../chart.service';
+
 import * as JSZip from 'jszip';
-import { saveAs } from 'file-saver/FileSaver';
+import * as firebase from 'firebase';
+import * as FBcsv from 'firebase-to-csv';
+
+import { saveAs, writeFile } from 'file-saver/FileSaver';
 
 @Component({
   selector: 'app-banner',
@@ -11,8 +15,8 @@ import { saveAs } from 'file-saver/FileSaver';
 
 export class BannerComponent implements OnInit {
 
-   private MONTHS = 12;
-   private months = ["January", "February", "March", 
+  private MONTHS = 12;
+  private months = ["January", "February", "March", 
                      "April", "May", "June", "July", 
                      "August", "September", "October",
                      "November", "December"];
@@ -25,16 +29,13 @@ export class BannerComponent implements OnInit {
   	window.open("https://logger-gsjj.firebaseapp.com/", '_blank');
   }
 
-  downloadFile(month) {
-    var i = 0;
-    while (this.months[i] != month)
-      i++;
-    var path = "././assets/log-" + (i + 1) + ".csv";
-    window.fetch(path).then(response => {
-      response.blob().then(fileBlob => {
-        console.log(fileBlob);
-        saveAs(fileBlob, month + "-log.csv");
-      });
+  downloadFile() {
+    var now = new Date();
+    var thisMonth = this.months[now.getMonth()];
+    var dataRef = firebase.database().ref('/garethjsharpe@gmail-com/data').once('value').then(snapshot => {
+      const csv = '[' + snapshot.val().slice(1) + ']'
+      var blob = new Blob([csv], {type: "text/json"});
+      saveAs(blob, thisMonth + "-Log.json");
     });
   }
 

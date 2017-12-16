@@ -61,9 +61,13 @@ try:
         email = to_email.replace('.', '-')
 
         # write data to firebase
-        firebase.put('/' + email, 'current', firebase_data)
-        firebase.put('/' + email, 'data/', firebase_data)
-        firebase.put('/' + email, 'power', power_data)
+        i += 1
+        try:
+            firebase.put('/' + email, 'current', firebase_data)
+            firebase.put('/' + email, 'data/' + str(i), firebase_data)
+            firebase.put('/' + email, 'power', power_data)
+        except:
+            i -= 1
 
         # write data to the necessary files
         writer.writerow(data)
@@ -100,6 +104,7 @@ try:
             file, file_name = utilities.setup_file(month, year)
             writer = csv.writer(file)
             writer.writerow(header)
+            i = 0
 
         # TODO: change to one second if applicable
         # wait ten second
