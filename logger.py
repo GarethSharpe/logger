@@ -50,6 +50,10 @@ midnight = 24
 error = True
 emailed_today = False
 
+# respond to user input
+print("Initialization successful.")
+print("Logging data...")
+
 # MAIN PROGRAM LOOP #
 try:
     while True:
@@ -109,7 +113,6 @@ try:
             writer.writerow(header)
             i = 0
 
-        # TODO: change to one second if applicable
         # wait ten second
         sleep(10)
 except KeyboardInterrupt:

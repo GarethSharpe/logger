@@ -28,20 +28,15 @@ def send_warning_email(smtp, from_email, to_email, error_data, error_sensors, lo
     msg['Date'] = formatdate(localtime = True)
     msg['Subject'] = "Unusual Activity Detected"
     err_msg = get_error_msg(error_data, error_sensors)
-    msg.attach(MIMEText('''Hey James,
+    msg.attach(MIMEText('''Hey there,
     \nI think I may have come across an issue today!
     \nThe following sensors have detected unusual behaviour:
     \n''' + err_msg + '''
-    \nI will notify you again if there is a problem in 12 hours.
+    \nI will notify you again if there is still a problem in 12 hours.
     \nLogger,
     \n''' + logger))
     smtp.sendmail(from_email, to_email, msg.as_string())
     return
-
-def setup_dropbox():
-    dbx = dropbox.Dropbox('xLeSoI1nzAAAAAAAAAAADXgvls4a1_5Nilz1W8MF3aw1Qj8rVP2V2thWfy2qnqwF')
-    dbx.users_get_current_account()
-    return dbx
 
 def setup_file(month, year):
     logger = input("logger name: ")
@@ -57,7 +52,7 @@ def get_error_msg(error_data, error_sensors):
     i = 0
     n = len(error_data)
     while i < n:
-        err_msg + error_sensors[i] + ': ' + str(error_data[i]) + '\n'
+        err_msg += error_sensors[i] + ': ' + str(error_data[i]) + '\n'
         i += 1
     return err_msg
 
