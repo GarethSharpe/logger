@@ -5,10 +5,10 @@ Created on Oct 14, 2017
 @version: 1.4.0
 '''
 
-import os
 import csv
 import utilities
 import sensors
+import sys
 
 from classes import LoggerData
 from firebase import firebase
@@ -24,10 +24,14 @@ firebase = firebase.FirebaseApplication('https://logger-dashboard.firebaseio.com
 hour, month, year = utilities.get_time()
 
 # setup necessary elements
-smtp, from_email, to_email = utilities.setup_email()
-
-# setup logs and files
-file, file_name, logger = utilities.setup_file(month, year)
+try:
+    print("Logger initialization...")
+    smtp, from_email, to_email = utilities.setup_email()
+    file, file_name, logger = utilities.setup_file(month, year)
+    print("Initialization successful.")
+except:
+    printf("Initialization unsuccessful.")
+    sys.exit()
 
 # setup writers
 writer = csv.writer(file)
@@ -50,14 +54,10 @@ midnight = 24
 error = True
 emailed_today = False
 
-# respond to user input
-print("Initialization successful.")
-print("Logging data...")
-
 # MAIN PROGRAM LOOP #
 try:
+    print("Logging data...")
     while True:
-
         # get data from sensors
         data = sensors.get_sensor_data()
         firebase_data = LoggerData(data).toJSON()
@@ -90,7 +90,7 @@ try:
         # the past 12 hours, send a notificaion email of error
         # TODO: update error 
         # TODO: update send_warning_email() to take error_data and error_sensors
-        if error == True and (hour == noon or hour == midnight) and not emailed_today:
+        if error and (hour == noon or hour == midnight) and not emailed_today:
             try:
                 utilities.send_warning_email(smtp, from_email, to_email, error_data, error_sensors, logger)
                 emailed_today = True

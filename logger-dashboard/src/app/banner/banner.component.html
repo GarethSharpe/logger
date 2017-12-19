@@ -6,7 +6,7 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item style="width: 100%;" *ngFor="let month of months;" (click)="downloadFileTest(month)">{{month}}</button>
   </mat-menu> -->
-  <button mat-mini-fab color="accent" class="icon" matTooltip="Save Chart"(click)="downloadFile()"><mat-icon>cloud_download</mat-icon></button>
+  <button mat-mini-fab color="accent" class="icon" matTooltip="Save Log"(click)="downloadFile()"><mat-icon>cloud_download</mat-icon></button>
   <button mat-mini-fab color="accent" class="icon" matTooltip="Save Chart"(click)="saveAsPng()"><mat-icon>camera</mat-icon></button>
   <app-gauge></app-gauge>
 </mat-toolbar><div class="me" matTooltip="................................|Gareth Sharpe, 2017"></div>
