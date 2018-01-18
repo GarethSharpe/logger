@@ -30,7 +30,7 @@ try:
     file, file_name, logger = utilities.setup_file(month, year)
     print("Initialization successful.")
 except:
-    printf("Initialization unsuccessful.")
+    print("Initialization unsuccessful.")
     sys.exit()
 
 # setup writers
