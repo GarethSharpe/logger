@@ -10,8 +10,6 @@ from email.utils import formatdate
 from smtplib import SMTP_SSL
 from datetime import datetime
 
-import dropbox
-
 def setup_email():
     smtp = SMTP_SSL('smtp.gmail.com')
     smtp.ehlo()
